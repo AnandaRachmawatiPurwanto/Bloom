@@ -13,6 +13,7 @@ extension Color {
         static let mainBackground = Color(hex: "#F2F2F7")
         
         static let activePink = Color(hex: "#FF657D")
+        static let secondPink = Color(hex: "#FBF6F7")
         static let activeGreen = Color(hex: "#0DC304")
         static let red = Color(hex: "#FF2D55")
         

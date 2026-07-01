@@ -16,7 +16,7 @@ extension Font {
 
         static let sectionHeader = Font.system(
             size: 24,
-            weight: .bold,
+            weight: .regular,
             design: .default
         )
 
