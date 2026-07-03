@@ -1,32 +1,56 @@
 import SwiftUI
 
-struct CheckoutButton: View {
-    let title: String
-    let imageName: String
+struct BloomButton2<Content: View>: View {
+    let maxWidth: Bool
     let action: () -> Void
+    let content: Content
+
+    init(
+        maxWidth: Bool = true,
+        action: @escaping () -> Void,
+        @ViewBuilder content: () -> Content
+    ) {
+        self.maxWidth = maxWidth
+        self.action = action
+        self.content = content()
+    }
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 128) {
-                Text(title)
-                    .font(.headline)
-                
-                Text(title)
-                    .font(.headline)
-            }
-            .padding()
-            .background(Color.pink)
-            .cornerRadius(16)
+            content
+                .font(.AppTheme.boldRegular)
+                .foregroundStyle(Color.white)
+                .padding(.horizontal, 18)
+                .padding(.vertical, 12)
+                .frame(maxWidth: maxWidth ? .infinity : nil)
+                .background(Color.pink)
+                .clipShape(
+                    RoundedRectangle(cornerRadius: 40)
+                )
         }
         .buttonStyle(.plain)
     }
 }
 
 #Preview {
-    CheckoutButton(
-        title: "Apple",
-        imageName: "appleLogo"
-    ) {
+    BloomButton2 {
         print("Tapped")
+    } content: {
+        HStack {
+            Text("1 Item")
+            Spacer()
+            Text("Checkout")
+        }
+    }
+}
+
+#Preview {
+    BloomButton2 {
+        print("Tapped")
+    } content: {
+        
+            Text("1 Item")
+           
+        
     }
 }
