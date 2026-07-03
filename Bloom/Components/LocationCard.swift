@@ -9,7 +9,7 @@ import SwiftUI
 
 
 struct LocationCard: View {
-
+    @State private var isShowingDetails = false
     var body: some View {
 
         VStack(alignment: .leading, spacing: 16) {
@@ -43,6 +43,7 @@ struct LocationCard: View {
                     "View Details",
                     style: .outlined
                 ) {
+                    isShowingDetails = true
 
                 }
 
@@ -53,6 +54,7 @@ struct LocationCard: View {
                 }
 
             }
+            
 
         }
         .frame(maxWidth: 335, maxHeight: 145)
@@ -62,6 +64,9 @@ struct LocationCard: View {
         .clipShape(
             RoundedRectangle(cornerRadius: 20)
         )
+        .navigationDestination(isPresented: $isShowingDetails){
+            ProductDetailsView()
+        }
     }
 }
 
