@@ -4,10 +4,8 @@
 //
 
 import SwiftUI
-import MapKit
 
-struct ProductDetailsView: View {
-    @EnvironmentObject var appState: AppState
+struct ProductDetails: View {
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
@@ -86,11 +84,7 @@ struct ProductDetailsView: View {
                                 style: .outlined,
                                 maxWidth: true
                             ) {
-                                // Set target coordinate to Bloom Central (The Breeze)
-                                appState.routeDestination = CLLocationCoordinate2D(latitude: -6.3024, longitude: 106.6522)
-                                appState.routeDestinationName = "The Breeze"
-                                appState.selectedTab = 1 // Switch to Map Tab
-                                dismiss() // Dismiss details view
+                                print("Get Direction Tapped")
                             }
                             
                             BloomButton(
@@ -114,8 +108,6 @@ struct ProductDetailsView: View {
 }
 
 #Preview {
-    ProductDetailsView()
-        .environmentObject(AppState())
+    ProductDetails()
 }
-
 

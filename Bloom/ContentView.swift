@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var selectedTab = 0
+    @EnvironmentObject var appState: AppState
     
     var body: some View {
-        TabView(selection: $selectedTab) {
+        TabView(selection: $appState.selectedTab) {
             // TAB 1: HOME
             NavigationStack {
                 HomeView()

@@ -18,10 +18,10 @@ struct HomeView: View {
                 // MARK: Greeting
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Hello, Fiona")
-                        .font(.system(size: 42, weight: .bold))
+                        .font(.system(size: 40, weight: .bold))
 
                     Text("Need to find pads?")
-                        .font(.system(size: 24, weight: .regular))
+                        .font(.system(size: 28, weight: .regular))
                 }
 
                 Divider()
