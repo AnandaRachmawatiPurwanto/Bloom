@@ -18,11 +18,20 @@ struct PayFailed: View {
             Text("Payment Failed")
                 .font(.largeTitle)
                 .padding()
-            Image("failed")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 124, height: 124)
-                .padding()
+            ZStack {
+                Image(systemName: "seal.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(Color.red.opacity(0.2))
+                    .frame(width: 140, height: 140)
+                
+                Image(systemName: "xmark")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(.red)
+                    .frame(width: 50, height: 50)
+                    .fontWeight(.bold)
+            }
             Spacer()
             BloomButton2 {
                 print("Checkout Tapped")
