@@ -6,13 +6,40 @@
 //
 
 import SwiftUI
-import MapKit
-struct ContentView: View {
-    var body: some View {
-        Map()
-    }
-}
 
-#Preview {
-    ContentView()
+struct ContentView: View {
+    @EnvironmentObject var appState: AppState
+    
+    var body: some View {
+        TabView(selection: $appState.selectedTab) {
+            // TAB 1: HOME
+            NavigationStack {
+                HomeView()
+            }
+            .tabItem {
+                Label("Home", systemImage: "house.fill")
+            }
+            .tag(0)
+            
+            // TAB 2: MAP (Full Screen Map)
+            NavigationStack {
+                MapView()
+            }
+            .tabItem {
+                Label("Map", systemImage: "map.fill")
+            }
+            .tag(1)
+            
+            // TAB 3: PROFILE (Sebagai contoh jika nanti ditambahkan)
+            NavigationStack {
+                Text("Profile Screen") // Nanti diganti dengan ProfileView()
+                    .navigationTitle("Profile")
+            }
+            .tabItem {
+                Label("Profile", systemImage: "person.fill")
+            }
+            .tag(2)
+        }
+        .tint(.pink) // Mengubah warna ikon aktif di Tab Bar (sesuai tema Bloom)
+    }
 }

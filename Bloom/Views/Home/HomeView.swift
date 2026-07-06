@@ -17,43 +17,43 @@ struct HomeView: View {
 
                 // MARK: Greeting
                 VStack(alignment: .leading, spacing: 4) {
-
                     Text("Hello, Fiona")
-                        .font(.system(size: 42, weight: .bold))
+                        .font(.system(size: 40, weight: .bold))
 
                     Text("Need to find pads?")
-                        .font(.system(size: 24, weight: .regular))
-
+                        .font(.system(size: 28, weight: .regular))
                 }
 
                 Divider()
 
                 // MARK: Character
-
-                Image("EmptyHome")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 280)
-                    .padding (.trailing, 10)
+                
+                ZStack(alignment: .bottomTrailing) {
+                    BloomMap()
+                        .frame(height: 220)
+                        .clipShape(RoundedRectangle(cornerRadius: 24))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 24)
+                                .stroke(Color.AppTheme.secondPink, lineWidth: 5)
+                        )
+                    
+                    NavigationLink {
+                        MapView()
+                    } label: {
+                        BloomIcon()
+                            .padding(.bottom, 16)
+                            .padding(.trailing, 16)
+                    }
+                }
 
                 // MARK: Nearby
-
-                HStack {
-
+                VStack(alignment:.leading) {
                     Text("Bloom Nearby")
                         .font(.AppTheme.sectionHeader)
                         .foregroundStyle(.secondary)
-
-                    Spacer()
-
-                    BloomIcon()
-
+                    
+                    LocationCard()
                 }
-
-                // MARK: Card
-
-                LocationCard()
 
             }
             .padding(.horizontal, 25)
@@ -66,9 +66,6 @@ struct HomeView: View {
     }
 }
 
-#Preview {
-    HomeView()
-}
 #Preview {
     HomeView()
 }

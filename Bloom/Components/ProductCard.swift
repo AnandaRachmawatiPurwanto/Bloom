@@ -45,7 +45,7 @@ struct ProductCard: View {
                     .fill(Color(red: 1.0, green: 0.4, blue: 0.47))
                     .frame(width: 126, height: 126)
                 
-                Image("pads")
+                Image("Pads")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 87, height: 89)

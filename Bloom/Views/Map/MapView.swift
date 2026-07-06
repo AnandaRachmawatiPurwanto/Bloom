@@ -1,51 +1,43 @@
+//
+//  MapView.swift
+//  Bloom
+//
+//  Created by Ananda Rachmawati Purwanto on 03/07/26.
+//
+
 import SwiftUI
 import MapKit
 
 struct MapView: View {
-    // 1. Memanggil mesin pemantau lokasi agar izin lokasi aktif
-    @StateObject private var locationManager = LocationManager()
-
-    // Posisi kamera awal
-    let cameraPosition: MapCameraPosition = .region(.init(
-        center: .bloomCentral,
-        latitudinalMeters: 1500,
-        longitudinalMeters: 1500
-    ))
-
+    @State private var cameraPosition: MapCameraPosition = .region(.init(
+            center: .bloomCentral,
+            latitudinalMeters: 1500,
+            longitudinalMeters: 1500
+        ))
     var body: some View {
-        Map(initialPosition: cameraPosition) {
+        ZStack(alignment: .bottomTrailing){
+            BloomMap()
             
-            // 2. Ini adalah baris ajaib untuk memunculkan titik biru lokasi kamu
-            UserAnnotation()
-            
-            // Marker 1: Custom Image (Pink)
-            Marker("Bloom Central", image: "Pads", coordinate: .bloomCentral)
-                .tint(.pink)
-            
-            // Marker 2: Unavailable (Gray)
-            Marker("Bloom Station", image: "Pads", coordinate: .bloomStation)
-                .tint(.gray)
-            
-            // Marker 3: Available (Pink)
-            Marker("Bloom Plaza", image: "Pads", coordinate: .bloomPlaza)
-                .tint(.pink)
-            
-        }
-        // 3. (Opsional) Menambahkan tombol bawaan Apple untuk lompat ke lokasi pengguna
-        .mapControls {
-            MapUserLocationButton()
-            MapCompass()
+            Button {
+                withAnimation {
+                    cameraPosition = .userLocation(fallback: .automatic)
+                }
+            } label: {
+                Image(systemName: "location.fill")
+                    .font(.title3)
+                    .foregroundColor(.pink)
+                    .frame(width: 44, height: 44)
+                    .background(Color.white)
+                    .clipShape(Circle())
+                    .shadow(color: .gray.opacity(0.3), radius: 4, x: 0, y: 2)
+            }
+            // Memberi sedikit jarak dari tepi layar
+            .padding(.bottom, 16)
+            .padding(.trailing, 16)
         }
     }
 }
 
 #Preview {
     MapView()
-}
-
-// Ekstensi untuk menyimpan titik lokasi secara rapi
-extension CLLocationCoordinate2D {
-    static let bloomCentral = CLLocationCoordinate2D(latitude: -6.3024, longitude: 106.6522)
-    static let bloomStation = CLLocationCoordinate2D(latitude: -6.3000, longitude: 106.6480)
-    static let bloomPlaza   = CLLocationCoordinate2D(latitude: -6.3045, longitude: 106.6435)
 }
