@@ -43,3 +43,8 @@ struct ContentView: View {
         .tint(.pink) // Mengubah warna ikon aktif di Tab Bar (sesuai tema Bloom)
     }
 }
+
+#Preview {
+    ContentView()
+        .environmentObject(AppState())
+}

@@ -40,4 +40,5 @@ struct MapView: View {
 
 #Preview {
     MapView()
+        .environmentObject(AppState())
 }

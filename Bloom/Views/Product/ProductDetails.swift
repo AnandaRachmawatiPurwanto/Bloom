@@ -7,6 +7,7 @@ import SwiftUI
 
 struct ProductDetails: View {
     @Environment(\.dismiss) var dismiss
+    @State private var navigateToProducts = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -92,7 +93,7 @@ struct ProductDetails: View {
                                 style: .filled,
                                 maxWidth: true
                             ) {
-                                print("Book Tapped")
+                                navigateToProducts = true
                             }
                         }
                         .padding(.top, 8)
@@ -104,10 +105,13 @@ struct ProductDetails: View {
         }
         .background(Color.AppTheme.mainBackground)
         .navigationBarHidden(true)
+        .navigationDestination(isPresented: $navigateToProducts) {
+            ProductsView()
+        }
     }
 }
 
 #Preview {
     ProductDetails()
+        .environmentObject(AppState())
 }
-

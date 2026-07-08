@@ -9,6 +9,7 @@ import MapKit
 struct ProductDetailsView: View {
     @EnvironmentObject var appState: AppState
     @Environment(\.dismiss) var dismiss
+    @State private var navigateToProducts = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -98,7 +99,7 @@ struct ProductDetailsView: View {
                                 style: .filled,
                                 maxWidth: true
                             ) {
-                                print("Book Tapped")
+                                navigateToProducts = true
                             }
                         }
                         .padding(.top, 8)
@@ -110,6 +111,9 @@ struct ProductDetailsView: View {
         }
         .background(Color.AppTheme.mainBackground)
         .navigationBarHidden(true)
+        .navigationDestination(isPresented: $navigateToProducts) {
+            ProductsView()
+        }
     }
 }
 

@@ -35,6 +35,6 @@ struct PaySuccess: View {
 }
 
 #Preview {
-        PaySuccess()
+    PaySuccess()
+        .environmentObject(AppState())
 }
-
