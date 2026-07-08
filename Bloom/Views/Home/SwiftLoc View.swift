@@ -1,5 +1,5 @@
 //
-//  Swift Loc.swift
+//  SwiftLoc View.swift
 //  Bloom
 //
 

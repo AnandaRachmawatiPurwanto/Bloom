@@ -23,10 +23,10 @@ enum AvailableCardStyle {
     var title: String {
         switch self {
         case .available:
-            return "Available"
+            return "Stock Available"
 
         case .unavailable:
-            return "Unavailable"
+            return "Stock Unavailable"
 
         }
     }
@@ -49,13 +49,13 @@ struct AvailableCard: View {
                 .frame(width: 8, height: 8)
 
             Text(style.title)
-                .font(.AppTheme.regularContent)
+                .font(.AppTheme.caption)
                 .foregroundStyle(style.color)
 
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
-        .frame(maxWidth: 120, maxHeight: 30)
+        .frame(maxWidth: 150, maxHeight: 30)
         .background(Color.white)
         .clipShape(Capsule())
         .shadow(color: .black.opacity(0.05), radius: 40, y: 2)

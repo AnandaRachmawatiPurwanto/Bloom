@@ -39,7 +39,6 @@ struct LocationCard: View {
             
             // Tombol Aksi
             HStack(spacing: 12) {
-                // Tombol View Details tetap ada, atau bisa kamu hapus/ganti kalau dirasa redundant
                 BloomButton(
                     "View Details",
                     style: .outlined

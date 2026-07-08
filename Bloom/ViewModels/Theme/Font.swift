@@ -54,6 +54,5 @@ extension Font {
             weight: .regular,
             design: .default
         )
-        .italic()
     }
 }
