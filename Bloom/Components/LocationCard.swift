@@ -76,7 +76,8 @@ struct LocationCard: View {
 }
 
 #Preview {
-    LocationCard()
-        .environmentObject(AppState())
+    NavigationStack {
+        LocationCard()
+            .environmentObject(AppState())
+    }
 }
-

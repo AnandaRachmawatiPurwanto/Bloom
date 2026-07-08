@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ProductsView: View {
+    @State private var navigateToCheckout = false
     let columns = [
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16)
@@ -23,7 +24,7 @@ struct ProductsView: View {
                 
                 // MARK: - Checkout Button
                 BloomButton2 {
-                    print("Checkout Tapped")
+                    navigateToCheckout = true
                 } content: {
                     HStack {
                         Text("1 Item")
@@ -34,9 +35,15 @@ struct ProductsView: View {
             }
             .padding()
         }
+        .navigationDestination(isPresented: $navigateToCheckout) {
+            CheckoutView()
+        }
     }
 }
 
 #Preview {
-    ProductsView()
+    NavigationStack {
+        ProductsView()
+            .environmentObject(AppState())
+    }
 }

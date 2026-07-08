@@ -4,12 +4,10 @@
 //
 
 import SwiftUI
-import MapKit
 
-struct ProductDetailsView: View {
-    @EnvironmentObject var appState: AppState
+struct ProductDetails: View {
     @Environment(\.dismiss) var dismiss
-    @State private var isShowingProducts = false
+    @State private var navigateToProducts = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -87,11 +85,7 @@ struct ProductDetailsView: View {
                                 style: .outlined,
                                 maxWidth: true
                             ) {
-                                // Set target coordinate to Bloom Central (The Breeze)
-                                appState.routeDestination = CLLocationCoordinate2D(latitude: -6.3024, longitude: 106.6522)
-                                appState.routeDestinationName = "The Breeze"
-                                appState.selectedTab = 1 // Switch to Map Tab
-                                dismiss() // Dismiss details view
+                                print("Get Direction Tapped")
                             }
                             
                             BloomButton(
@@ -99,7 +93,7 @@ struct ProductDetailsView: View {
                                 style: .filled,
                                 maxWidth: true
                             ) {
-                                isShowingProducts = true
+                                navigateToProducts = true
                             }
                         }
                         .padding(.top, 8)
@@ -111,15 +105,13 @@ struct ProductDetailsView: View {
         }
         .background(Color.AppTheme.mainBackground)
         .navigationBarHidden(true)
-        .navigationDestination(isPresented: $isShowingProducts) {
-            ProductsView() // <-- Layar tujuan saat tombol ditekan
+        .navigationDestination(isPresented: $navigateToProducts) {
+            ProductsView()
         }
     }
 }
 
 #Preview {
-    ProductDetailsView()
+    ProductDetails()
         .environmentObject(AppState())
 }
-
-

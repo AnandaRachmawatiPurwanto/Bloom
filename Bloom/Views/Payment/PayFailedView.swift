@@ -47,6 +47,6 @@ struct PayFailed: View {
 }
 
 #Preview {
-        PayFailed()
+    PayFailed()
+        .environmentObject(AppState())
 }
-
