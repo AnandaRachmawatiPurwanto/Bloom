@@ -95,7 +95,7 @@ struct ProductDetailsView: View {
                             }
                             
                             BloomButton(
-                                "Book",
+                                "Choose Pad",
                                 style: .filled,
                                 maxWidth: true
                             ) {

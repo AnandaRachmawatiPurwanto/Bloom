@@ -47,7 +47,7 @@ struct LocationCard: View {
                 }
                 
                 BloomButton(
-                    "Book"
+                    "Choose Pad"
                 ) {
                     isShowingProducts = true
                 }
