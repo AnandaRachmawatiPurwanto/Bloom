@@ -8,6 +8,7 @@ import MapKit
 
 struct ProductDetailsView: View {
     @EnvironmentObject var appState: AppState
+    @StateObject private var viewModel = ProductsViewModel()
     @Environment(\.dismiss) var dismiss
     @State private var isShowingProducts = false
 
@@ -55,11 +56,11 @@ struct ProductDetailsView: View {
                         
                         // Title and Subtitle
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("The Breeze")
+                            Text(viewModel.machineName)
                                 .font(.AppTheme.sectionTitle)
                                 .foregroundColor(.black)
                             
-                            Text("Green Park Office")
+                            Text(viewModel.machineSubtitle)
                                 .font(.system(size: 22, weight: .regular))
                                 .foregroundColor(.secondary)
                         }
@@ -67,17 +68,17 @@ struct ProductDetailsView: View {
                         // Distance, Walking, and Status row
                         HStack {
                             HStack(spacing: 16) {
-                                DistanceComponent(value: "120m away", type: .distance)
-                                DistanceComponent(value: "5 mins", type: .walking)
+                                DistanceComponent(value: viewModel.distance, type: .distance)
+                                DistanceComponent(value: viewModel.duration, type: .walking)
                             }
                             
                             Spacer()
                             
-                            AvailableCard()
+                            AvailableCard(style: viewModel.isAvailable ? .available : .unavailable)
                         }
                         
                         // Available Products Grid Card
-                        ProductList(products: ["Regular Pad", "Wings Pad", "Pantyliner", "Night Pad"])
+                        ProductList(products: viewModel.availableProducts)
                         
                         // Action Buttons
                         HStack(spacing: 12) {
@@ -87,10 +88,7 @@ struct ProductDetailsView: View {
                                 style: .outlined,
                                 maxWidth: true
                             ) {
-                                // Set target coordinate to Bloom Central (The Breeze)
-                                appState.routeDestination = CLLocationCoordinate2D(latitude: -6.3024, longitude: 106.6522)
-                                appState.routeDestinationName = "The Breeze"
-                                appState.selectedTab = 1 // Switch to Map Tab
+                                viewModel.getDirection()
                                 dismiss() // Dismiss details view
                             }
                             
@@ -113,6 +111,9 @@ struct ProductDetailsView: View {
         .navigationBarHidden(true)
         .navigationDestination(isPresented: $isShowingProducts) {
             ProductsView() // <-- Layar tujuan saat tombol ditekan
+        }
+        .onAppear {
+            viewModel.setup(appState: appState)
         }
     }
 }

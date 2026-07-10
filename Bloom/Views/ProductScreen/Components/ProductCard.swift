@@ -2,28 +2,41 @@
 import SwiftUI
 
 struct ProductCard: View {
-    @State private var quantity: Int = 1
+    @EnvironmentObject var appState: AppState
+    let product: VendingMachineProduct
+    
+    var isSelected: Bool {
+        appState.selectedProduct?.id == product.id
+    }
     
     var body: some View {
         ZStack(alignment: .top) {
             
             VStack(spacing: 16) {
-                Text("Regular Pad")
+                Text(product.name)
                     .font(.system(size: 20, weight: .medium))
                     .foregroundColor(.black)
                 
                 HStack(spacing: 24) {
-                    Button(action: {}
-                    ) {
-                        Text("Add")
+                    Button(action: {
+                        if isSelected {
+                            appState.selectedProduct = nil
+                            appState.selectedQuantity = 1
+                        } else {
+                            appState.selectedProduct = product
+                            appState.selectedQuantity = 1
+                        }
+                    }) {
+                        Text(isSelected ? "Added" : (product.stock > 0 ? "Add" : "Out of Stock"))
                             .font(.system(size: 16, weight: .bold))
-                            .foregroundColor(.black)
+                            .foregroundColor(product.stock > 0 ? .black : .secondary)
                             .frame(maxWidth: 162, maxHeight: 36)
-                            .background(Color(red: 1.0, green: 0.75, blue: 0.8))
+                            .background(isSelected ? Color.green.opacity(0.2) : (product.stock > 0 ? Color(red: 1.0, green: 0.75, blue: 0.8) : Color.gray.opacity(0.3)))
                             .clipShape(
                                 RoundedRectangle(cornerRadius: 40)
                             )
                     }
+                    .disabled(product.stock == 0)
                     
                 }
             }
@@ -45,7 +58,7 @@ struct ProductCard: View {
                     .fill(Color(red: 1.0, green: 0.4, blue: 0.47))
                     .frame(width: 126, height: 126)
                 
-                Image("pads")
+                Image(product.imageName)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 87, height: 89)
@@ -57,7 +70,8 @@ struct ProductCard: View {
 
 struct ProductCardView_Previews: PreviewProvider {
     static var previews: some View {
-        ProductCard()
+        ProductCard(product: VendingMachineProduct(name: "Regular Pad", imageName: "pads", price: 15000, stock: 10))
+            .environmentObject(AppState())
             .previewLayout(.sizeThatFits)
             .padding()
     }

@@ -29,6 +29,14 @@ struct ContentView: View {
                 Label("Map", systemImage: "map.fill")
             }
             .tag(1)
+
+            NavigationStack {
+                BookingView()
+            }
+            .tabItem {
+                Label("Booking", systemImage: "cart.fill")
+            }
+            .tag(2)
             
             // TAB 3: PROFILE (Sebagai contoh jika nanti ditambahkan)
             NavigationStack {
@@ -38,7 +46,7 @@ struct ContentView: View {
             .tabItem {
                 Label("Profile", systemImage: "person.fill")
             }
-            .tag(2)
+            .tag(3)
         }
         .tint(.pink) // Mengubah warna ikon aktif di Tab Bar (sesuai tema Bloom)
     }

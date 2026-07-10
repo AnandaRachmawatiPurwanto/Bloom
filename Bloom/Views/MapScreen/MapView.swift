@@ -9,19 +9,15 @@ import SwiftUI
 import MapKit
 
 struct MapView: View {
-    @State private var cameraPosition: MapCameraPosition = .region(.init(
-            center: .bloomCentral,
-            latitudinalMeters: 1500,
-            longitudinalMeters: 1500
-        ))
+    @EnvironmentObject var appState: AppState
+    @StateObject private var viewModel = MapViewModel()
+    
     var body: some View {
         ZStack(alignment: .bottomTrailing){
-            BloomMap()
+            BloomMap(viewModel: viewModel)
             
             Button {
-                withAnimation {
-                    cameraPosition = .userLocation(fallback: .automatic)
-                }
+                viewModel.resetCameraToUserLocation()
             } label: {
                 Image(systemName: "location.fill")
                     .font(.title3)
@@ -34,6 +30,9 @@ struct MapView: View {
             // Memberi sedikit jarak dari tepi layar
             .padding(.bottom, 16)
             .padding(.trailing, 16)
+        }
+        .onAppear {
+            viewModel.setup(appState: appState)
         }
     }
 }

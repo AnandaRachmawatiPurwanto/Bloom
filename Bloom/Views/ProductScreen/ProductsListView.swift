@@ -1,7 +1,10 @@
 import SwiftUI
 
 struct ProductsView: View {
+    @EnvironmentObject var appState: AppState
+    @StateObject private var viewModel = ProductsViewModel()
     @State private var navigateToCheckout = false
+    
     let columns = [
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16)
@@ -12,13 +15,23 @@ struct ProductsView: View {
             VStack(alignment: .leading, spacing: 28) {
                 
                 // MARK: - Location Card
-                LocCard(image: "loc", title: "The Breeze", subtitle: "Green Office Park")
+                LocCard(
+                    image: "loc",
+                    title: viewModel.machineName,
+                    subtitle: viewModel.machineSubtitle
+                )
                 
                 // MARK: - Products Grid
                 
                 LazyVGrid(columns: columns, spacing: 16) {
-                    ForEach(0..<4, id: \.self) { _ in
-                        ProductCard()
+                    if !viewModel.products.isEmpty {
+                        ForEach(viewModel.products) { product in
+                            ProductCard(product: product)
+                        }
+                    } else {
+                        ForEach(0..<4, id: \.self) { _ in
+                            ProductCard(product: VendingMachineProduct(name: "Regular Pad", imageName: "pads", price: 15000, stock: 10))
+                        }
                     }
                 }
                 
@@ -27,16 +40,22 @@ struct ProductsView: View {
                     navigateToCheckout = true
                 } content: {
                     HStack {
-                        Text("1 Item")
+                        if !viewModel.checkoutItemCountText.isEmpty {
+                            Text(viewModel.checkoutItemCountText)
+                        }
                         Spacer()
-                        Text("Checkout")
+                        Text(viewModel.checkoutText)
                     }
                 }
+                .disabled(!viewModel.hasSelection)
             }
             .padding()
         }
         .navigationDestination(isPresented: $navigateToCheckout) {
             CheckoutView()
+        }
+        .onAppear {
+            viewModel.setup(appState: appState)
         }
     }
 }
