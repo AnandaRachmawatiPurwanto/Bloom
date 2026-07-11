@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct PaySuccess: View {
+struct PaySuccessView: View {
+    @State private var navigateToDetail = false
 
     var body: some View {
         VStack {
@@ -22,7 +23,7 @@ struct PaySuccess: View {
                 .padding()
             Spacer()
             BloomButton2 {
-                print("Checkout Tapped")
+                navigateToDetail = true
             } content: {
                 HStack {
                     Text("See Detail Booking")
@@ -31,10 +32,13 @@ struct PaySuccess: View {
             }
             .padding()
         }
+        .navigationDestination(isPresented: $navigateToDetail) {
+            BookingDetailView().navigationBarBackButtonHidden(true)
+        }
     }
 }
 
 #Preview {
-    PaySuccess()
+    PaySuccessView()
         .environmentObject(AppState())
 }

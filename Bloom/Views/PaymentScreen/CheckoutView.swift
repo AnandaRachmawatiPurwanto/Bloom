@@ -99,10 +99,10 @@ struct CheckoutView: View {
             .padding()
         }
         .navigationDestination(isPresented: $viewModel.navigateToSuccess) {
-            PaySuccess().navigationBarBackButtonHidden(true)
+            PaySuccessView().navigationBarBackButtonHidden(true)
         }
         .navigationDestination(isPresented: $viewModel.navigateToFailed) {
-            PayFailed().navigationBarBackButtonHidden(true)
+            PayFailedView().navigationBarBackButtonHidden(true)
         }
         .onAppear {
             viewModel.setup(appState: appState)
