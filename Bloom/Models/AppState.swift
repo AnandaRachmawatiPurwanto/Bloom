@@ -5,18 +5,18 @@
 
 import SwiftUI
 import MapKit
-import Combine
+import Observation
 
-class AppState: ObservableObject {
-    @Published var selectedTab: Int = 0
-    @Published var routeDestination: CLLocationCoordinate2D? = nil
-    @Published var routeDestinationName: String = ""
+@Observable class AppState {
+    var selectedTab: Int = 0
+    var routeDestination: CLLocationCoordinate2D? = nil
+    var routeDestinationName: String = ""
     
     let locationManager = LocationManager()
     
-    @Published var bookings: [Booking] = []
+    var bookings: [Booking] = []
     
-    @Published var vendingMachines: [VendingMachine] = [
+    var vendingMachines: [VendingMachine] = [
         VendingMachine(
             name: "The Breeze",
             subtitle: "Green Office Park",
@@ -61,9 +61,9 @@ class AppState: ObservableObject {
         )
     ]
     
-    @Published var selectedVendingMachine: VendingMachine? = nil
-    @Published var selectedProduct: VendingMachineProduct? = nil
-    @Published var selectedQuantity: Int = 1
+    var selectedVendingMachine: VendingMachine? = nil
+    var selectedProduct: VendingMachineProduct? = nil
+    var selectedQuantity: Int = 1
     
     init() {
         self.selectedVendingMachine = vendingMachines.first

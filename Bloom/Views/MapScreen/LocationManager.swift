@@ -6,14 +6,14 @@
 //
 import Foundation
 import CoreLocation
-import Combine
+import Observation
 
-class LocationManager: NSObject, ObservableObject {
+@Observable class LocationManager: NSObject {
 
     private let manager = CLLocationManager()
 
-    @Published var userLocation: CLLocationCoordinate2D?
-    @Published var heading: CLHeading?
+    var userLocation: CLLocationCoordinate2D?
+    var heading: CLHeading?
 
     override init() {
         super.init()

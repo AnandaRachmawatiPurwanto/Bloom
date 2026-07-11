@@ -8,13 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var appState: AppState
+    @Environment(AppState.self) var appState
     
     var body: some View {
-        TabView(selection: $appState.selectedTab) {
+        @Bindable var bindableAppState = appState
+        TabView(selection: $bindableAppState.selectedTab) {
             // TAB 1: HOME
             NavigationStack {
-                HomeView()
+                HomeView(appState: appState)
             }
             .tabItem {
                 Label("Home", systemImage: "house.fill")
@@ -23,7 +24,7 @@ struct ContentView: View {
             
             // TAB 2: MAP (Full Screen Map)
             NavigationStack {
-                MapView()
+                MapView(appState: appState)
             }
             .tabItem {
                 Label("Map", systemImage: "map.fill")
@@ -31,7 +32,7 @@ struct ContentView: View {
             .tag(1)
 
             NavigationStack {
-                BookingView()
+                BookingView(appState: appState)
             }
             .tabItem {
                 Label("Booking", systemImage: "cart.fill")
@@ -54,5 +55,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .environmentObject(AppState())
+        .environment(AppState())
 }

@@ -4,44 +4,25 @@
 //
 
 import SwiftUI
-import Combine
+import Observation
 
-class CheckoutViewModel: ObservableObject {
-    @Published var selectedVendingMachine: VendingMachine? = nil
-    @Published var selectedProduct: VendingMachineProduct? = nil
-    @Published var selectedQuantity: Int = 1
-    @Published var selectedPayment: PaymentType? = nil
-    @Published var navigateToSuccess = false
-    @Published var navigateToFailed = false
-    @Published var isProcessing = false
-    
-    private var appState: AppState?
-    private var cancellables = Set<AnyCancellable>()
-    
-    func setup(appState: AppState) {
-        self.appState = appState
-        
-        // Sync selected vending machine from AppState
-        appState.$selectedVendingMachine
-            .sink { [weak self] machine in
-                self?.selectedVendingMachine = machine
-            }
-            .store(in: &cancellables)
-            
-        // Sync selected product from AppState
-        appState.$selectedProduct
-            .sink { [weak self] product in
-                self?.selectedProduct = product
-            }
-            .store(in: &cancellables)
-            
-        // Sync selected quantity from AppState
-        appState.$selectedQuantity
-            .sink { [weak self] qty in
-                self?.selectedQuantity = qty
-            }
-            .store(in: &cancellables)
+@Observable class CheckoutViewModel {
+    var selectedVendingMachine: VendingMachine? {
+        appState.selectedVendingMachine
     }
+    
+    var selectedProduct: VendingMachineProduct? {
+        appState.selectedProduct
+    }
+    
+    var selectedQuantity: Int {
+        appState.selectedQuantity
+    }
+    
+    var selectedPayment: PaymentType? = nil
+    var navigateToSuccess = false
+    var navigateToFailed = false
+    var isProcessing = false
     
     var productName: String {
         return selectedProduct?.name ?? "Regular Pad"
@@ -75,6 +56,12 @@ class CheckoutViewModel: ObservableObject {
         return selectedVendingMachine?.subtitle ?? "Green Office Park"
     }
     
+    private let appState: AppState
+    
+    init(appState: AppState) {
+        self.appState = appState
+    }
+    
     func checkout() {
         guard selectedPayment != nil else {
             print("Pilih metode pembayaran terlebih dahulu!")
@@ -89,18 +76,17 @@ class CheckoutViewModel: ObservableObject {
             self.isProcessing = false
             
             // Simulasikan pembuatan booking sukses
-            if let appState = self.appState, let machine = self.selectedVendingMachine {
+            if let machine = self.selectedVendingMachine {
                 let newBooking = Booking(
                     vendingMachine: machine,
                     date: Date(),
                     totalPrice: self.totalPrice,
                     status: .readyForPickup
                 )
-                appState.bookings.append(newBooking)
+                self.appState.bookings.append(newBooking)
             }
             
             self.navigateToSuccess = true
         }
     }
-    
 }

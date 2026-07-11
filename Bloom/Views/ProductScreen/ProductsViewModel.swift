@@ -4,39 +4,19 @@
 //
 
 import SwiftUI
-import Combine
+import Observation
 
-class ProductsViewModel: ObservableObject {
-    @Published var selectedVendingMachine: VendingMachine? = nil
-    @Published var selectedProduct: VendingMachineProduct? = nil
-    @Published var selectedQuantity: Int = 1
+@Observable class ProductsViewModel {
+    var selectedVendingMachine: VendingMachine? {
+        appState.selectedVendingMachine
+    }
     
-    private var appState: AppState?
-    private var cancellables = Set<AnyCancellable>()
+    var selectedProduct: VendingMachineProduct? {
+        appState.selectedProduct
+    }
     
-    func setup(appState: AppState) {
-        self.appState = appState
-        
-        // Sync selected vending machine from AppState
-        appState.$selectedVendingMachine
-            .sink { [weak self] machine in
-                self?.selectedVendingMachine = machine
-            }
-            .store(in: &cancellables)
-            
-        // Sync selected product from AppState
-        appState.$selectedProduct
-            .sink { [weak self] product in
-                self?.selectedProduct = product
-            }
-            .store(in: &cancellables)
-            
-        // Sync selected quantity from AppState
-        appState.$selectedQuantity
-            .sink { [weak self] qty in
-                self?.selectedQuantity = qty
-            }
-            .store(in: &cancellables)
+    var selectedQuantity: Int {
+        appState.selectedQuantity
     }
     
     var hasSelection: Bool {
@@ -83,8 +63,14 @@ class ProductsViewModel: ObservableObject {
         return selectedVendingMachine?.subtitle ?? "Green Park Office"
     }
     
+    private let appState: AppState
+    
+    init(appState: AppState) {
+        self.appState = appState
+    }
+    
     func getDirection() {
-        guard let appState = appState, let machine = selectedVendingMachine else { return }
+        guard let machine = selectedVendingMachine else { return }
         appState.routeDestination = machine.coordinate
         appState.routeDestinationName = machine.name
         appState.selectedTab = 1 // Switch to Map tab

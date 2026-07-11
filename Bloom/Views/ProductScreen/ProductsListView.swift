@@ -1,9 +1,13 @@
 import SwiftUI
 
 struct ProductsView: View {
-    @EnvironmentObject var appState: AppState
-    @StateObject private var viewModel = ProductsViewModel()
+    @Environment(AppState.self) var appState
+    @State private var viewModel: ProductsViewModel
     @State private var navigateToCheckout = false
+    
+    init(appState: AppState) {
+        _viewModel = State(initialValue: ProductsViewModel(appState: appState))
+    }
     
     let columns = [
         GridItem(.flexible(), spacing: 16),
@@ -52,17 +56,14 @@ struct ProductsView: View {
             .padding()
         }
         .navigationDestination(isPresented: $navigateToCheckout) {
-            CheckoutView()
-        }
-        .onAppear {
-            viewModel.setup(appState: appState)
+            CheckoutView(appState: appState)
         }
     }
 }
 
 #Preview {
     NavigationStack {
-        ProductsView()
-            .environmentObject(AppState())
+        ProductsView(appState: AppState())
+            .environment(AppState())
     }
 }

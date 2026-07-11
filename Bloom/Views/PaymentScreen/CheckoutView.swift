@@ -5,8 +5,12 @@ enum PaymentType {
 }
 
 struct CheckoutView: View {
-    @EnvironmentObject var appState: AppState
-    @StateObject private var viewModel = CheckoutViewModel()
+    @Environment(AppState.self) var appState
+    @State private var viewModel: CheckoutViewModel
+    
+    init(appState: AppState) {
+        _viewModel = State(initialValue: CheckoutViewModel(appState: appState))
+    }
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -104,15 +108,12 @@ struct CheckoutView: View {
         .navigationDestination(isPresented: $viewModel.navigateToFailed) {
             PayFailed().navigationBarBackButtonHidden(true)
         }
-        .onAppear {
-            viewModel.setup(appState: appState)
-        }
     }
 }
 
 #Preview {
     NavigationStack {
-        CheckoutView()
-            .environmentObject(AppState())
+        CheckoutView(appState: AppState())
+            .environment(AppState())
     }
 }

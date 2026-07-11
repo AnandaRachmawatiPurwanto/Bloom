@@ -5,39 +5,20 @@
 
 import SwiftUI
 import MapKit
-import Combine
+import Observation
 
-class MapViewModel: ObservableObject {
-    @Published var route: MKRoute? = nil
-    @Published var cameraPosition: MapCameraPosition = .userLocation(followsHeading: true, fallback: .automatic)
-    @Published var vendingMachines: [VendingMachine] = []
+@Observable class MapViewModel {
+    var route: MKRoute? = nil
+    var cameraPosition: MapCameraPosition = .userLocation(followsHeading: true, fallback: .automatic)
     
-    private var appState: AppState?
-    private var cancellables = Set<AnyCancellable>()
+    var vendingMachines: [VendingMachine] {
+        appState.vendingMachines
+    }
     
-    func setup(appState: AppState) {
+    private let appState: AppState
+    
+    init(appState: AppState) {
         self.appState = appState
-        
-        // Sync vending machines
-        appState.$vendingMachines
-            .sink { [weak self] machines in
-                self?.vendingMachines = machines
-            }
-            .store(in: &cancellables)
-            
-        // Sync route changes
-        appState.$routeDestination
-            .sink { [weak self] destination in
-                self?.handleDestinationChange(destination)
-            }
-            .store(in: &cancellables)
-            
-        // Sync user location changes
-        appState.locationManager.$userLocation
-            .sink { [weak self] location in
-                self?.handleLocationChange(location)
-            }
-            .store(in: &cancellables)
     }
     
     func resetCameraToUserLocation() {
@@ -46,25 +27,17 @@ class MapViewModel: ObservableObject {
         }
     }
     
-    private func handleDestinationChange(_ destination: CLLocationCoordinate2D?) {
-        guard let destination = destination,
-              let userLocation = appState?.locationManager.userLocation else {
+    func updateRoute(userLocation: CLLocationCoordinate2D?, destination: CLLocationCoordinate2D?) {
+        guard let source = userLocation, let dest = destination else {
             self.route = nil
             return
         }
-        calculateRoute(from: userLocation, to: destination)
-    }
-    
-    private func handleLocationChange(_ location: CLLocationCoordinate2D?) {
-        guard let location = location,
-              let destination = appState?.routeDestination else { return }
-        calculateRoute(from: location, to: destination)
-    }
-    
-    func calculateRoute(from source: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D) {
+        
         let request = MKDirections.Request()
-        request.source = MKMapItem(placemark: MKPlacemark(coordinate: source))
-        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: destination))
+        let sourceLocation = CLLocation(latitude: source.latitude, longitude: source.longitude)
+        let destinationLocation = CLLocation(latitude: dest.latitude, longitude: dest.longitude)
+        request.source = MKMapItem(location: sourceLocation, address: nil)
+        request.destination = MKMapItem(location: destinationLocation, address: nil)
         request.transportType = .walking
         
         Task {

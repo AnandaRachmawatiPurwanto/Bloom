@@ -10,14 +10,14 @@ import FirebaseCore
 
 @main
 struct BloomApp: App {
-    @StateObject private var appState = AppState()
+    @State private var appState = AppState()
     init() {
             FirebaseApp.configure()
         }
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(appState)
+                .environment(appState)
         }
     }
 }

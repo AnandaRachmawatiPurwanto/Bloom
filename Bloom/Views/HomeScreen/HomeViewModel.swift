@@ -4,27 +4,22 @@
 //
 
 import SwiftUI
-import Combine
+import Observation
 
-class HomeViewModel: ObservableObject {
-    @Published var userName: String = "Fiona"
-    @Published var vendingMachines: [VendingMachine] = []
+@Observable class HomeViewModel {
+    var userName: String = "Fiona"
     
     var greetingMessage: String {
         return "Need to find pads?"
     }
     
-    private var appState: AppState?
-    private var cancellables = Set<AnyCancellable>()
+    var vendingMachines: [VendingMachine] {
+        return appState.vendingMachines
+    }
     
-    func setup(appState: AppState) {
+    private let appState: AppState
+    
+    init(appState: AppState) {
         self.appState = appState
-        
-        // Sync the vending machines from AppState
-        appState.$vendingMachines
-            .sink { [weak self] machines in
-                self?.vendingMachines = machines
-            }
-            .store(in: &cancellables)
     }
 }

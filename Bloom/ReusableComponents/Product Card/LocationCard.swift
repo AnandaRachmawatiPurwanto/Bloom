@@ -9,7 +9,7 @@ import SwiftUI
 import CoreLocation
 
 struct LocationCard: View {
-    @EnvironmentObject var appState: AppState
+    @Environment(AppState.self) var appState
     let vendingMachine: VendingMachine
     
     @State private var isShowingDetails = false
@@ -101,10 +101,10 @@ struct LocationCard: View {
         
         // --- Navigasi Terpusat ---
         .navigationDestination(isPresented: $isShowingDetails) {
-            ProductDetailsView()
+            ProductDetailsView(appState: appState)
         }
         .navigationDestination(isPresented: $isShowingProducts) {
-            ProductsView()
+            ProductsView(appState: appState)
         }
     }
 }
@@ -112,6 +112,6 @@ struct LocationCard: View {
 #Preview {
     NavigationStack {
         LocationCard(vendingMachine: AppState().vendingMachines[0])
-            .environmentObject(AppState())
+            .environment(AppState())
     }
 }

@@ -2,7 +2,7 @@
 import SwiftUI
 
 struct ProductCard: View {
-    @EnvironmentObject var appState: AppState
+    @Environment(AppState.self) var appState
     let product: VendingMachineProduct
     
     var isSelected: Bool {
@@ -71,7 +71,7 @@ struct ProductCard: View {
 struct ProductCardView_Previews: PreviewProvider {
     static var previews: some View {
         ProductCard(product: VendingMachineProduct(name: "Regular Pad", imageName: "pads", price: 15000, stock: 10))
-            .environmentObject(AppState())
+            .environment(AppState())
             .previewLayout(.sizeThatFits)
             .padding()
     }

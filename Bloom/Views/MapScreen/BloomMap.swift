@@ -2,7 +2,8 @@ import SwiftUI
 import MapKit
 
 struct BloomMap: View {
-    @ObservedObject var viewModel: MapViewModel
+    @Environment(AppState.self) var appState
+    @Bindable var viewModel: MapViewModel
 
     var body: some View {
         Map(position: $viewModel.cameraPosition) {
@@ -30,14 +31,24 @@ struct BloomMap: View {
             MapUserLocationButton()
             MapScaleView()
         }
+        .onAppear {
+            viewModel.updateRoute(userLocation: appState.locationManager.userLocation, destination: appState.routeDestination)
+        }
+        .onChange(of: appState.locationManager.userLocation?.latitude) { _, _ in
+            viewModel.updateRoute(userLocation: appState.locationManager.userLocation, destination: appState.routeDestination)
+        }
+        .onChange(of: appState.locationManager.userLocation?.longitude) { _, _ in
+            viewModel.updateRoute(userLocation: appState.locationManager.userLocation, destination: appState.routeDestination)
+        }
+        .onChange(of: appState.routeDestination?.latitude) { _, _ in
+            viewModel.updateRoute(userLocation: appState.locationManager.userLocation, destination: appState.routeDestination)
+        }
+        .onChange(of: appState.routeDestination?.longitude) { _, _ in
+            viewModel.updateRoute(userLocation: appState.locationManager.userLocation, destination: appState.routeDestination)
+        }
     }
 }
-// Ekstensi untuk menyimpan titik lokasi secara rapi dan menambahkan Equatable conformance
-extension CLLocationCoordinate2D: Equatable {
-    public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
-        return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
-    }
-    
+extension CLLocationCoordinate2D {
     static let bloomCentral = CLLocationCoordinate2D(latitude: -6.3024, longitude: 106.6522)
     static let bloomStation = CLLocationCoordinate2D(latitude: -6.3000, longitude: 106.6480)
     static let bloomPlaza   = CLLocationCoordinate2D(latitude: -6.3045, longitude: 106.6435)

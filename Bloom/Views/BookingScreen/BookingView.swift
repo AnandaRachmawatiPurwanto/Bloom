@@ -6,9 +6,13 @@
 import SwiftUI
 
 struct BookingView: View {
-    @EnvironmentObject var appState: AppState
-    @StateObject private var viewModel = BookingViewModel()
+    @Environment(AppState.self) var appState
+    @State private var viewModel: BookingViewModel
     @State private var selectedSegment = 0 // 0: On Going, 1: History
+    
+    init(appState: AppState) {
+        _viewModel = State(initialValue: BookingViewModel(appState: appState))
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -56,9 +60,6 @@ struct BookingView: View {
             }
         }
         .background(Color.AppTheme.mainBackground)
-        .onAppear {
-            viewModel.setup(appState: appState)
-        }
     }
 }
 
@@ -116,6 +117,6 @@ struct SegmentedControl: View {
 }
 
 #Preview {
-    BookingView()
-        .environmentObject(AppState())
+    BookingView(appState: AppState())
+        .environment(AppState())
 }

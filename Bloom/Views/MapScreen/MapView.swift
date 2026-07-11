@@ -9,8 +9,12 @@ import SwiftUI
 import MapKit
 
 struct MapView: View {
-    @EnvironmentObject var appState: AppState
-    @StateObject private var viewModel = MapViewModel()
+    @Environment(AppState.self) var appState
+    @State private var viewModel: MapViewModel
+    
+    init(appState: AppState) {
+        _viewModel = State(initialValue: MapViewModel(appState: appState))
+    }
     
     var body: some View {
         ZStack(alignment: .bottomTrailing){
@@ -31,13 +35,10 @@ struct MapView: View {
             .padding(.bottom, 16)
             .padding(.trailing, 16)
         }
-        .onAppear {
-            viewModel.setup(appState: appState)
-        }
     }
 }
 
 #Preview {
-    MapView()
-        .environmentObject(AppState())
+    MapView(appState: AppState())
+        .environment(AppState())
 }

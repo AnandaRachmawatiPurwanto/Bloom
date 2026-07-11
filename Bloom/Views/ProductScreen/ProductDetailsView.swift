@@ -7,10 +7,14 @@ import SwiftUI
 import MapKit
 
 struct ProductDetailsView: View {
-    @EnvironmentObject var appState: AppState
-    @StateObject private var viewModel = ProductsViewModel()
+    @Environment(AppState.self) var appState
+    @State private var viewModel: ProductsViewModel
     @Environment(\.dismiss) var dismiss
     @State private var isShowingProducts = false
+
+    init(appState: AppState) {
+        _viewModel = State(initialValue: ProductsViewModel(appState: appState))
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -110,17 +114,14 @@ struct ProductDetailsView: View {
         .background(Color.AppTheme.mainBackground)
         .navigationBarHidden(true)
         .navigationDestination(isPresented: $isShowingProducts) {
-            ProductsView() // <-- Layar tujuan saat tombol ditekan
-        }
-        .onAppear {
-            viewModel.setup(appState: appState)
+            ProductsView(appState: appState) // <-- Layar tujuan saat tombol ditekan
         }
     }
 }
 
 #Preview {
-    ProductDetailsView()
-        .environmentObject(AppState())
+    ProductDetailsView(appState: AppState())
+        .environment(AppState())
 }
 
 

@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct HomeView: View {
-    @EnvironmentObject var appState: AppState
-    @StateObject private var viewModel = HomeViewModel()
+    @Environment(AppState.self) var appState
+    @State private var viewModel: HomeViewModel
+    
+    init(appState: AppState) {
+        _viewModel = State(initialValue: HomeViewModel(appState: appState))
+    }
     
     var body: some View {
         
@@ -20,53 +24,40 @@ struct HomeView: View {
                 // MARK: Greeting
                 VStack(alignment: .leading, spacing: 4) {
                     
-                    Text("Hello, \(viewModel.userName)")
+                    Text("Hello, \(viewModel.userName)") // <-- Menggunakan ViewModel
                         .font(.system(size: 42, weight: .bold))
                     
-                    Text(viewModel.greetingMessage)
+                    Text(viewModel.greetingMessage) // <-- Menggunakan ViewModel
                         .font(.system(size: 24, weight: .regular))
                     
                 }
                 
                 Divider()
                 
-                // MARK: Character
-                
-                //                Image("EmptyHome")
-                //                    .resizable()
-                //                    .scaledToFit()
-                //                    .frame(maxWidth: .infinity)
-                //                    .frame(height: 280)
-                //                    .padding (.trailing, 10)
-                ZStack{
-                    MapView()
+                // MARK: Character & Map
+                ZStack {
+                    MapView(appState: appState)
                         .frame(height: 320)
                         .clipShape(RoundedRectangle(cornerRadius: 24))
                         .overlay(
                             RoundedRectangle(cornerRadius: 24)
                                 .stroke(Color.AppTheme.secondPink, lineWidth: 5)
                         )
-                    
-                    
-                    
                 }
                 
-                
                 // MARK: Nearby
-                
                 HStack {
                     Text("Bloom Nearby")
                         .font(.AppTheme.sectionHeader)
                         .foregroundStyle(.secondary)
                 }
                 
-                // MARK: Card
+                // MARK: Card Vending Machines
                 VStack(spacing: 16) {
-                    ForEach(viewModel.vendingMachines) { machine in
+                    ForEach(viewModel.vendingMachines) { machine in // <-- Menggunakan ViewModel
                         LocationCard(vendingMachine: machine)
                     }
                 }
-                
             }
             .padding(.horizontal, 25)
             .padding(.top, 20)
@@ -74,17 +65,10 @@ struct HomeView: View {
             
         }
         .background(Color.AppTheme.mainBackground)
-        .onAppear {
-            viewModel.setup(appState: appState)
-        }
     }
 }
 
 #Preview {
-    HomeView()
-        .environmentObject(AppState())
-}
-#Preview {
-    HomeView()
-        .environmentObject(AppState())
+    HomeView(appState: AppState())
+        .environment(AppState())
 }
