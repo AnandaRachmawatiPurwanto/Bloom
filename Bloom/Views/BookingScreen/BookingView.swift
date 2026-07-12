@@ -54,7 +54,12 @@ struct BookingView: View {
                         .padding()
                     } else {
                         ForEach(bookings) { booking in
-                            CardBooking(booking: booking)
+                            NavigationLink {
+                                BookingDetailView(booking: booking)
+                            } label: {
+                                CardBooking(booking: booking)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
                 }

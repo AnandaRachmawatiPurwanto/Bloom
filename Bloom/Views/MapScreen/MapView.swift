@@ -43,7 +43,7 @@ struct MapView: View {
         ), onDismiss: {
             if appState.shouldNavigateToProductsList {
                 appState.shouldNavigateToProductsList = false
-                appState.isShowingProductsList = true
+                appState.isShowingProductsListMap = true
             } else {
                 appState.selectedVendingMachine = nil
             }
@@ -52,7 +52,7 @@ struct MapView: View {
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
         }
-        .navigationDestination(isPresented: $bindableAppState.isShowingProductsList) {
+        .navigationDestination(isPresented: $bindableAppState.isShowingProductsListMap) {
             ProductsView(appState: appState)
         }
     }

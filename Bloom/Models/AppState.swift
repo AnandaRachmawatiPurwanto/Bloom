@@ -66,7 +66,8 @@ import Observation
     var selectedQuantity: Int = 1
     
     var isShowingDetailsSheet: Bool = false
-    var isShowingProductsList: Bool = false
+    var isShowingProductsListHome: Bool = false
+    var isShowingProductsListMap: Bool = false
     var shouldNavigateToProductsList: Bool = false
     
     init() {

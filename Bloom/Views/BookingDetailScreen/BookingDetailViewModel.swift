@@ -11,7 +11,14 @@ import FirebaseDatabase
 @Observable class BookingDetailViewModel {
     var isCollected: Bool = false
     
-    func listenToFirebase() {
+    let booking: Booking
+    
+    init(booking: Booking) {
+        self.booking = booking
+        self.isCollected = booking.status == .collected
+    }
+    
+    func listenToFirebase(appState: AppState) {
         let databaseURL = "https://vending-pembalut-default-rtdb.asia-southeast1.firebasedatabase.app"
         let ref = Database.database(url: databaseURL).reference()
         let node = ref.child("vending_machines/MESIN_PEMBALUT_01/trigger_keluarkan")
@@ -22,10 +29,16 @@ import FirebaseDatabase
                 return
             }
             
-            node.observe(.value) { snapshot in
+            node.observe(.value) { [weak self] snapshot in
+                guard let self = self else { return }
                 if let value = snapshot.value as? Bool, value == true {
                     withAnimation {
                         self.isCollected = true
+                        
+                        // Update status booking di appState
+                        if let index = appState.bookings.firstIndex(where: { $0.id == self.booking.id }) {
+                            appState.bookings[index].status = .collected
+                        }
                     }
                 }
             }

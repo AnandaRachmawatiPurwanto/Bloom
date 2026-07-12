@@ -72,7 +72,7 @@ struct HomeView: View {
         ), onDismiss: {
             if appState.shouldNavigateToProductsList {
                 appState.shouldNavigateToProductsList = false
-                appState.isShowingProductsList = true
+                appState.isShowingProductsListHome = true
             } else {
                 appState.selectedVendingMachine = nil
             }
@@ -81,7 +81,7 @@ struct HomeView: View {
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
         }
-        .navigationDestination(isPresented: $bindableAppState.isShowingProductsList) {
+        .navigationDestination(isPresented: $bindableAppState.isShowingProductsListHome) {
             ProductsView(appState: appState)
         }
     }

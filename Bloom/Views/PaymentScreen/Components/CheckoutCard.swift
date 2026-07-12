@@ -16,9 +16,9 @@ struct CheckoutCard: View {
     var body: some View {
         HStack(spacing:12)
         {
-            Image(image)
+            Image("Pads")
                 .resizable()
-                .frame(width: 48, height: 48)
+                .frame(width: 30, height: 30)
                 .background(Color(.pink).opacity(0.5))
                 .clipShape(Circle())
             VStack(alignment:.leading, spacing:4)
@@ -32,7 +32,7 @@ struct CheckoutCard: View {
         }
         .padding(.vertical, 16)
         .padding(.horizontal, 20)
-        .frame(maxWidth: 354, maxHeight: 92)
+        .frame(width: .infinity)
         .cornerRadius(16)
         .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color(.pink).opacity(0.5), lineWidth: 0.5))
     }

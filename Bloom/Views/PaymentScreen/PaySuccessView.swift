@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PaySuccessView: View {
+    let booking: Booking
     @State private var navigateToDetail = false
 
     var body: some View {
@@ -33,12 +34,21 @@ struct PaySuccessView: View {
             .padding()
         }
         .navigationDestination(isPresented: $navigateToDetail) {
-            BookingDetailView().navigationBarBackButtonHidden(true)
+            BookingDetailView(booking: booking).navigationBarBackButtonHidden(true)
         }
     }
 }
 
 #Preview {
-    PaySuccessView()
-        .environment(AppState())
+    let appState = AppState()
+    let booking = Booking(
+        vendingMachine: appState.vendingMachines[0],
+        date: Date(),
+        totalPrice: 15000,
+        status: .readyForPickup
+    )
+    return NavigationStack {
+        PaySuccessView(booking: booking)
+            .environment(appState)
+    }
 }

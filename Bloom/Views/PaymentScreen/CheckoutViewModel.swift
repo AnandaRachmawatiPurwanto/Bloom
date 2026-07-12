@@ -23,6 +23,7 @@ import Observation
     var navigateToSuccess = false
     var navigateToFailed = false
     var isProcessing = false
+    var createdBooking: Booking? = nil
     
     var productName: String {
         return selectedProduct?.name ?? "Regular Pad"
@@ -84,6 +85,7 @@ import Observation
                     status: .readyForPickup
                 )
                 self.appState.bookings.append(newBooking)
+                self.createdBooking = newBooking
             }
             
             self.navigateToSuccess = true

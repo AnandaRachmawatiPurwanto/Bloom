@@ -21,6 +21,9 @@ import Observation
         self.appState = appState
     }
     
+    private var lastCalculatedUserLocation: CLLocationCoordinate2D? = nil
+    private var lastCalculatedDestination: CLLocationCoordinate2D? = nil
+    
     func resetCameraToUserLocation() {
         withAnimation {
             cameraPosition = .userLocation(fallback: .automatic)
@@ -30,8 +33,39 @@ import Observation
     func updateRoute(userLocation: CLLocationCoordinate2D?, destination: CLLocationCoordinate2D?) {
         guard let source = userLocation, let dest = destination else {
             self.route = nil
+            self.lastCalculatedUserLocation = nil
+            self.lastCalculatedDestination = nil
             return
         }
+        
+        // Check if destination has changed
+        var needsUpdate = false
+        if let lastDest = lastCalculatedDestination {
+            if lastDest.latitude != dest.latitude || lastDest.longitude != dest.longitude {
+                needsUpdate = true
+            }
+        } else {
+            needsUpdate = true
+        }
+        
+        // Check if user location has changed significantly (>= 10 meters)
+        if !needsUpdate {
+            if let lastSource = lastCalculatedUserLocation {
+                let currentLoc = CLLocation(latitude: source.latitude, longitude: source.longitude)
+                let lastLoc = CLLocation(latitude: lastSource.latitude, longitude: lastSource.longitude)
+                let distance = currentLoc.distance(from: lastLoc)
+                if distance >= 10 { // 10 meters threshold
+                    needsUpdate = true
+                }
+            } else {
+                needsUpdate = true
+            }
+        }
+        
+        guard needsUpdate else { return }
+        
+        self.lastCalculatedUserLocation = source
+        self.lastCalculatedDestination = dest
         
         let request = MKDirections.Request()
         let sourceLocation = CLLocation(latitude: source.latitude, longitude: source.longitude)

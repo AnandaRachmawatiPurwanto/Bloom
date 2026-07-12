@@ -2,35 +2,23 @@
 //  BookingDetailView.swift
 //  Bloom
 //
-//
 //  Created by Rendi Septrian on 10/07/26.
 //
 
 import SwiftUI
 
-struct BookingInfo {
-    let orderId: String
-    let date: Date
-    let productPrice: Double
-    let discount: Double
-    
-    var total: Double {
-        return productPrice - discount
-    }
-}
-
 struct BookingDetailView: View {
-    let booking = BookingInfo(
-        orderId: "1231938402af",
-        date: Date(),
-        productPrice: 100000,
-        discount: 20000
-    )
+    let booking: Booking
     
     @State private var isSummaryExpanded: Bool = true
-    @State private var viewModel = BookingDetailViewModel()
+    @State private var viewModel: BookingDetailViewModel
     @Environment(AppState.self) var appState
     @Environment(\.dismiss) var dismiss
+    
+    init(booking: Booking) {
+        self.booking = booking
+        _viewModel = State(initialValue: BookingDetailViewModel(booking: booking))
+    }
     
     var body: some View {
         ZStack {
@@ -46,10 +34,13 @@ struct BookingDetailView: View {
                         QrCard(image: "qr", title: "Scan this QR code at the vending machine")
                     }
                     VStack {
-                        LocCard(image: "loc", title: "The Breeze", subtitle: "Green Office Park")
+                        LocCard(image: "loc", title: booking.vendingMachine.name, subtitle: booking.vendingMachine.subtitle)
                         
                         BloomButton2 {
-                            print("Tapped")
+                            appState.routeDestination = booking.vendingMachine.coordinate
+                            appState.routeDestinationName = booking.vendingMachine.name
+                            appState.selectedTab = 1 // Switch to Map tab
+                            dismiss() // Pop back to bookings
                         } content: {
                             HStack {
                                 Text("Get Directions")
@@ -78,13 +69,16 @@ struct BookingDetailView: View {
                             }
                         }
                         
-                        // MARK: - logika dropdown disini
                         if isSummaryExpanded {
-                            Text("Order ID : \(booking.orderId) - \(formattedDate(booking.date))")
+                            let orderId = booking.id.uuidString.prefix(12).lowercased()
+                            let productPrice = booking.totalPrice + 2000.0
+                            let discount = 2000.0
+                            
+                            Text("Order ID : \(orderId) - \(formattedDate(booking.date))")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             
-                            CheckoutCard(image: "pads", title: "Mastercard", subtitle: "**** **** **** 1234", amount: Int(booking.total))
+                            CheckoutCard(image: "Pads", title: "Mastercard", subtitle: "**** **** **** 1234", amount: Int(booking.totalPrice))
                             VStack(alignment: .leading, spacing: 12) {
                                 Text("Summary")
                                     .font(.headline)
@@ -92,13 +86,13 @@ struct BookingDetailView: View {
                                 HStack {
                                     Text("Product")
                                     Spacer()
-                                    Text(formatRupiah(booking.productPrice)) // Format otomatis
+                                    Text(formatRupiah(productPrice)) // Format otomatis
                                 }
                                 
                                 HStack {
                                     Text("Discount (NEWUSER)")
                                     Spacer()
-                                    Text("-\(formatRupiah(booking.discount))")
+                                    Text("-\(formatRupiah(discount))")
                                         .foregroundStyle(.pink)
                                 }
                                 
@@ -107,7 +101,7 @@ struct BookingDetailView: View {
                                 HStack {
                                     Text("Total")
                                     Spacer()
-                                    Text(formatRupiah(booking.total))
+                                    Text(formatRupiah(booking.totalPrice))
                                 }
                                 .font(.headline)
                                 
@@ -130,6 +124,7 @@ struct BookingDetailView: View {
                     if viewModel.isCollected {
                         BloomButton2 {
                             appState.selectedTab = 0
+                            dismiss() // Pop back to bookings
                         } content: {
                             HStack {
                                 Text("Buy Again")
@@ -142,7 +137,7 @@ struct BookingDetailView: View {
             }
         }
         .onAppear {
-            viewModel.listenToFirebase()
+            viewModel.listenToFirebase(appState: appState)
         }
     }
     
@@ -168,6 +163,15 @@ struct BookingDetailView: View {
 }
 
 #Preview {
-    BookingDetailView()
-        .environment(AppState())
+    let appState = AppState()
+    let booking = Booking(
+        vendingMachine: appState.vendingMachines[0],
+        date: Date(),
+        totalPrice: 15000,
+        status: .readyForPickup
+    )
+    return NavigationStack {
+        BookingDetailView(booking: booking)
+            .environment(appState)
+    }
 }

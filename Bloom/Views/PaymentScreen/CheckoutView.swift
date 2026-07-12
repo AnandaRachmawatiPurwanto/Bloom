@@ -103,7 +103,11 @@ struct CheckoutView: View {
             .padding()
         }
         .navigationDestination(isPresented: $viewModel.navigateToSuccess) {
-            PaySuccessView().navigationBarBackButtonHidden(true)
+            if let booking = viewModel.createdBooking {
+                PaySuccessView(booking: booking).navigationBarBackButtonHidden(true)
+            } else {
+                Text("Error: Booking not found")
+            }
         }
         .navigationDestination(isPresented: $viewModel.navigateToFailed) {
             PayFailedView().navigationBarBackButtonHidden(true)

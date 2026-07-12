@@ -41,25 +41,33 @@ struct LocationCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             
-            // Header: Judul & Status Ketersediaan
-            HStack {
-                Text(vendingMachine.name)
-                    .font(.AppTheme.sectionTitle)
+            // Tappable card content area
+            VStack(alignment: .leading, spacing: 16) {
+                // Header: Judul & Status Ketersediaan
+                HStack {
+                    Text(vendingMachine.name)
+                        .font(.AppTheme.sectionTitle)
+                }
                 
+                // Info Jarak & Waktu Tempuh (Dihitung dinamis menggunakan GPS)
+                HStack(spacing: 24) {
+                    let info = dynamicDistanceAndDuration
+                    DistanceComponent(
+                        value: info.distance,
+                        type: .distance
+                    )
+                    
+                    DistanceComponent(
+                        value: info.duration,
+                        type: .walking
+                    )
+                }
             }
-            
-            // Info Jarak & Waktu Tempuh (Dihitung dinamis menggunakan GPS)
-            HStack(spacing: 24) {
-                let info = dynamicDistanceAndDuration
-                DistanceComponent(
-                    value: info.distance,
-                    type: .distance
-                )
-                
-                DistanceComponent(
-                    value: info.duration,
-                    type: .walking
-                )
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                appState.selectedVendingMachine = vendingMachine
+                appState.isShowingDetailsSheet = true // Ketika kartu diklik, langsung memicu sheet
             }
             
             // Tombol Aksi
@@ -76,7 +84,7 @@ struct LocationCard: View {
                     "Choose Pad"
                 ) {
                     appState.selectedVendingMachine = vendingMachine
-                    appState.isShowingProductsList = true
+                    appState.isShowingProductsListHome = true
                 }
             }
         }
@@ -86,12 +94,6 @@ struct LocationCard: View {
         .padding(.horizontal, 20)
         .background(Color.AppTheme.secondPink)
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        
-        .contentShape(RoundedRectangle(cornerRadius: 20)) // Memastikan area kosong di background juga sensitif klik
-        .onTapGesture {
-            appState.selectedVendingMachine = vendingMachine
-            appState.isShowingDetailsSheet = true // Ketika kartu diklik, langsung memicu sheet
-        }
     }
 }
 
