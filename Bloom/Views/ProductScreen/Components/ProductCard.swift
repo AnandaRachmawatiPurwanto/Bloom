@@ -18,7 +18,11 @@ struct ProductCard: View {
                     .foregroundColor(.black)
                 
                 HStack(spacing: 24) {
-                    Button(action: {
+                    BloomButton(
+                        isSelected ? "Added" : (product.stock > 0 ? "Add" : "Out of Stock"),
+                        style: isSelected ? .filled : .outlined,
+                        maxWidth: true
+                    ) {
                         if isSelected {
                             appState.selectedProduct = nil
                             appState.selectedQuantity = 1
@@ -26,18 +30,8 @@ struct ProductCard: View {
                             appState.selectedProduct = product
                             appState.selectedQuantity = 1
                         }
-                    }) {
-                        Text(isSelected ? "Added" : (product.stock > 0 ? "Add" : "Out of Stock"))
-                            .font(.system(size: 16, weight: .bold))
-                            .foregroundColor(product.stock > 0 ? .black : .secondary)
-                            .frame(maxWidth: 162, maxHeight: 36)
-                            .background(isSelected ? Color.green.opacity(0.2) : (product.stock > 0 ? Color(red: 1.0, green: 0.75, blue: 0.8) : Color.gray.opacity(0.3)))
-                            .clipShape(
-                                RoundedRectangle(cornerRadius: 40)
-                            )
                     }
                     .disabled(product.stock == 0)
-                    
                 }
             }
             .padding(.top, 70)
