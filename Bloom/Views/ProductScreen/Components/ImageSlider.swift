@@ -27,7 +27,7 @@ struct ImageSlider: View {
                     
                 }
                 .frame(width: 335, height: 250)
-                .background(Color.AppTheme.white)
+                //.background(Color.AppTheme.white)
                 .clipped()
                 .cornerRadius(24)
                 .overlay(

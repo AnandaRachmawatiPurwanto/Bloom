@@ -16,6 +16,7 @@ struct HomeView: View {
     }
     
     var body: some View {
+        @Bindable var bindableAppState = appState
         
         ScrollView(showsIndicators: false) {
             
@@ -65,6 +66,18 @@ struct HomeView: View {
             
         }
         .background(Color.AppTheme.mainBackground)
+        .sheet(isPresented: $bindableAppState.isShowingDetailsSheet, onDismiss: {
+            if !appState.isShowingProductsList {
+                appState.selectedVendingMachine = nil
+            }
+        }) {
+            ProductDetailsView(appState: appState)
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+        }
+        .navigationDestination(isPresented: $bindableAppState.isShowingProductsList) {
+            ProductsView(appState: appState)
+        }
     }
 }
 

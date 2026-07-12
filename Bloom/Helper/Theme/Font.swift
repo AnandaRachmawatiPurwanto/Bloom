@@ -54,5 +54,11 @@ extension Font {
             weight: .regular,
             design: .default
         )
+        static let captionBold = Font.system(
+            size: 10,
+            weight: .bold,
+            design: .default
+        )
+        
     }
 }

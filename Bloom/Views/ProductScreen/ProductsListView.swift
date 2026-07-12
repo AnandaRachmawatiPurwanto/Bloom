@@ -34,7 +34,7 @@ struct ProductsView: View {
                         }
                     } else {
                         ForEach(0..<4, id: \.self) { _ in
-                            ProductCard(product: VendingMachineProduct(name: "Regular Pad", imageName: "pads", price: 15000, stock: 10))
+                            ProductCard(product: VendingMachineProduct(name: "Regular Pad", imageName: "Pads", price: 15000, stock: 10))
                         }
                     }
                 }

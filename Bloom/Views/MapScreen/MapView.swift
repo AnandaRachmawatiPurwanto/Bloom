@@ -17,6 +17,8 @@ struct MapView: View {
     }
     
     var body: some View {
+        @Bindable var bindableAppState = appState
+        
         ZStack(alignment: .bottomTrailing){
             BloomMap(viewModel: viewModel)
             
@@ -34,6 +36,18 @@ struct MapView: View {
             // Memberi sedikit jarak dari tepi layar
             .padding(.bottom, 16)
             .padding(.trailing, 16)
+        }
+        .sheet(isPresented: $bindableAppState.isShowingDetailsSheet, onDismiss: {
+            if !appState.isShowingProductsList {
+                appState.selectedVendingMachine = nil
+            }
+        }) {
+            ProductDetailsView(appState: appState)
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+        }
+        .navigationDestination(isPresented: $bindableAppState.isShowingProductsList) {
+            ProductsView(appState: appState)
         }
     }
 }

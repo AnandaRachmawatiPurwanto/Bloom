@@ -8,54 +8,27 @@ import SwiftUI
 
 struct ProductList: View {
 
-    let products:[String]
+    let products: [String]
 
-    var body: some View{
-
-        VStack(alignment:.leading, spacing: 12){
-
-            Text("Product Available")
-                .font(.headline)
-
-            LazyVGrid(
-                columns:[
-                    GridItem(.flexible()),
-                    GridItem(.flexible())
-                ],
-                spacing:20
-            ){
-
-                ForEach(products,id:\.self){ item in
-
-                    HStack{
-
-                        Circle()
-                            .fill(Color.pink)
-                            .frame(width:16,height:16)
-
-                        Text(item)
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 16) {
+                ForEach(products, id: \.self) { item in
+                    HStack(spacing: 6) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                            .font(.system(size: 16, weight: .bold))
                         
-                        Spacer()
-
+                        Text(item)
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundColor(.green)
                     }
-
                 }
-
             }
-
         }
-        .padding()
-        .background(.white)
-        .overlay{
-            RoundedRectangle(cornerRadius:24)
-                .stroke(Color.pink,lineWidth:1)
-        }
-        .clipShape(RoundedRectangle(cornerRadius:24))
-
     }
-
 }
 
 #Preview {
-    ProductList(products: ["Pads", "Panty Liners", "Tampons", "Menstrual Cups"])
+    ProductList(products: ["Night Pads", "Day Pads", "Regular Pads"])
 }

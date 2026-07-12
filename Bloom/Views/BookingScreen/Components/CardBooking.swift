@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct CardBooking: View {
 
@@ -17,12 +18,12 @@ struct CardBooking: View {
 
             RoundedRectangle(cornerRadius: 18)
                 .fill(.pink)
-                .frame(width: 72, height: 72)
+                .frame(width: 53, height: 55)
                 .overlay {
-                    Image("pads")
+                    Image("Pads")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 42)
+                        .frame(width: 40, height: 35)
                 }
 
             VStack(alignment: .leading) {
@@ -36,20 +37,26 @@ struct CardBooking: View {
 
             Spacer()
 
-            VStack(alignment: .trailing, spacing: 8) {
+            VStack(alignment: .trailing, spacing: 10) {
 
                 Text("Rp. \(Int(booking.totalPrice))")
+                    .font(Font.body.bold())
+                    .fixedSize(horizontal: true, vertical: false)
+
 
                 Text(booking.status.title)
-                    .font(.caption.bold())
-                    .padding(.horizontal,12)
-                    .padding(.vertical,5)
-                    .background(statusColor)
+                    .font(.AppTheme.captionBold)
                     .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .fixedSize(horizontal: true, vertical: false)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(statusColor)
                     .clipShape(Capsule())
             }
 
             Image(systemName: "chevron.right")
+            
         }
         .padding()
         .background(.white)
@@ -68,3 +75,30 @@ struct CardBooking: View {
     }
 }
 
+#Preview {
+    CardBooking(
+        booking: Booking(
+            vendingMachine: VendingMachine(
+                name: "The Breeze",
+                subtitle: "Green Office Park",
+                distance: "120m away",
+                duration: "5 mins",
+                isAvailable: true,
+                coordinate: .init(latitude: -6.301, longitude: 106.652),
+                products: [
+                    VendingMachineProduct(
+                        name: "Regular Pad",
+                        imageName: "pads",
+                        price: 10000,
+                        stock: 10
+                    )
+                ]
+            ),
+            date: .now,
+            totalPrice: 10000,
+            status: .readyForPickup
+        )
+    )
+    .padding()
+    .background(Color(.systemGray6))
+}

@@ -6,7 +6,9 @@ struct BloomMap: View {
     @Bindable var viewModel: MapViewModel
 
     var body: some View {
-        Map(position: $viewModel.cameraPosition) {
+        @Bindable var bindableAppState = appState
+        
+        Map(position: $viewModel.cameraPosition, selection: $bindableAppState.selectedVendingMachine) {
             // Titik lokasi user
             UserAnnotation()
 
@@ -18,6 +20,7 @@ struct BloomMap: View {
                     coordinate: machine.coordinate
                 )
                 .tint(machine.isAvailable ? .pink : .gray)
+                .tag(machine)
             }
 
             if let route = viewModel.route {
@@ -33,6 +36,11 @@ struct BloomMap: View {
         }
         .onAppear {
             viewModel.updateRoute(userLocation: appState.locationManager.userLocation, destination: appState.routeDestination)
+        }
+        .onChange(of: appState.selectedVendingMachine) { _, newMachine in
+            if newMachine != nil {
+                appState.isShowingDetailsSheet = true
+            }
         }
         .onChange(of: appState.locationManager.userLocation?.latitude) { _, _ in
             viewModel.updateRoute(userLocation: appState.locationManager.userLocation, destination: appState.routeDestination)

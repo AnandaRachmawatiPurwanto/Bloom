@@ -65,6 +65,9 @@ import Observation
     var selectedProduct: VendingMachineProduct? = nil
     var selectedQuantity: Int = 1
     
+    var isShowingDetailsSheet: Bool = false
+    var isShowingProductsList: Bool = false
+    
     init() {
         self.selectedVendingMachine = vendingMachines.first
 

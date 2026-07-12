@@ -12,9 +12,6 @@ struct LocationCard: View {
     @Environment(AppState.self) var appState
     let vendingMachine: VendingMachine
     
-    @State private var isShowingDetails = false
-    @State private var isShowingProducts = false
-    
     // Hitung jarak & durasi perjalanan secara dinamis dari GPS terkini user di AppState
     private var dynamicDistanceAndDuration: (distance: String, duration: String) {
         guard let userCoordinate = appState.locationManager.userLocation else {
@@ -75,14 +72,14 @@ struct LocationCard: View {
                     style: .outlined
                 ) {
                     appState.selectedVendingMachine = vendingMachine
-                    isShowingDetails = true
+                    appState.isShowingDetailsSheet = true
                 }
                 
                 BloomButton(
                     "Choose Pad"
                 ) {
                     appState.selectedVendingMachine = vendingMachine
-                    isShowingProducts = true
+                    appState.isShowingProductsList = true
                 }
             }
         }
@@ -96,15 +93,7 @@ struct LocationCard: View {
         .contentShape(RoundedRectangle(cornerRadius: 20)) // Memastikan area kosong di background juga sensitif klik
         .onTapGesture {
             appState.selectedVendingMachine = vendingMachine
-            isShowingDetails = true // Ketika kartu diklik, langsung memicu navigasi
-        }
-        
-        // --- Navigasi Terpusat ---
-        .navigationDestination(isPresented: $isShowingDetails) {
-            ProductDetailsView(appState: appState)
-        }
-        .navigationDestination(isPresented: $isShowingProducts) {
-            ProductsView(appState: appState)
+            appState.isShowingDetailsSheet = true // Ketika kartu diklik, langsung memicu sheet
         }
     }
 }

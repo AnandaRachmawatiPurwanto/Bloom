@@ -24,8 +24,12 @@ struct BookingView: View {
                 .padding(.top, 20)
             
             // Segmented Picker
-            SegmentedControl(selectedSegment: $selectedSegment)
-                .padding(.horizontal, 25)
+            Picker("", selection: $selectedSegment) {
+                Text("On Going").tag(0)
+                Text("History").tag(1)
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal, 25)
             
             // Scrollable List of Cards
             ScrollView(showsIndicators: false) {
@@ -63,58 +67,7 @@ struct BookingView: View {
     }
 }
 
-// Custom segment selector matching the design in the mockup
-struct SegmentedControl: View {
-    @Binding var selectedSegment: Int
-    
-    var body: some View {
-        HStack(spacing: 0) {
-            Button(action: {
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                    selectedSegment = 0
-                }
-            }) {
-                Text("On Going")
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundColor(selectedSegment == 0 ? .black : .gray)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(
-                        Group {
-                            if selectedSegment == 0 {
-                                Capsule()
-                                    .fill(Color.white)
-                                    .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
-                            }
-                        }
-                    )
-            }
-            
-            Button(action: {
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                    selectedSegment = 1
-                }
-            }) {
-                Text("History")
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundColor(selectedSegment == 1 ? .black : .gray)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(
-                        Group {
-                            if selectedSegment == 1 {
-                                Capsule()
-                                    .fill(Color.white)
-                                    .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
-                            }
-                        }
-                    )
-            }
-        }
-        .padding(4)
-        .frame(height: 48)
-        .background(Color(.systemGray6))
-        .clipShape(Capsule())
-    }
-}
+
 
 #Preview {
     BookingView(appState: AppState())
