@@ -28,8 +28,8 @@ struct BookingDetailView: View {
     )
     
     @State private var isSummaryExpanded: Bool = true
-    @StateObject private var viewModel = BookingDetailViewModel()
-    @EnvironmentObject var appState: AppState
+    @State private var viewModel = BookingDetailViewModel()
+    @Environment(AppState.self) var appState
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -169,5 +169,5 @@ struct BookingDetailView: View {
 
 #Preview {
     BookingDetailView()
-        .environmentObject(AppState())
+        .environment(AppState())
 }

@@ -5,11 +5,11 @@
 //  Created by Rendi Septrian on 12/07/26.
 //
 import SwiftUI
-import Combine
+import Observation
 import FirebaseDatabase
 
-class BookingDetailViewModel: ObservableObject {
-    @Published var isCollected: Bool = false
+@Observable class BookingDetailViewModel {
+    var isCollected: Bool = false
     
     func listenToFirebase() {
         let databaseURL = "https://vending-pembalut-default-rtdb.asia-southeast1.firebasedatabase.app"
@@ -22,10 +22,10 @@ class BookingDetailViewModel: ObservableObject {
                 return
             }
             
-            node.observe(.value) { [weak self] snapshot in
+            node.observe(.value) { snapshot in
                 if let value = snapshot.value as? Bool, value == true {
                     withAnimation {
-                        self?.isCollected = true
+                        self.isCollected = true
                     }
                 }
             }
