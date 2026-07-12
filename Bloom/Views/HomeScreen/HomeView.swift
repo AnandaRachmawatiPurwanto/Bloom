@@ -66,7 +66,10 @@ struct HomeView: View {
             
         }
         .background(Color.AppTheme.mainBackground)
-        .sheet(isPresented: $bindableAppState.isShowingDetailsSheet, onDismiss: {
+        .sheet(isPresented: Binding(
+            get: { appState.isShowingDetailsSheet && appState.selectedTab == 0 },
+            set: { appState.isShowingDetailsSheet = $0 }
+        ), onDismiss: {
             if appState.shouldNavigateToProductsList {
                 appState.shouldNavigateToProductsList = false
                 appState.isShowingProductsList = true
