@@ -71,11 +71,8 @@ struct ProductDetailsView: View {
                             style: .filled,
                             maxWidth: true
                         ) {
+                            appState.shouldNavigateToProductsList = true
                             appState.isShowingDetailsSheet = false
-
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                appState.isShowingProductsList = true
-                            }
                         }
                     }
 

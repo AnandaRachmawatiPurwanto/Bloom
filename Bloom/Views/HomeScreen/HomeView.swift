@@ -67,7 +67,10 @@ struct HomeView: View {
         }
         .background(Color.AppTheme.mainBackground)
         .sheet(isPresented: $bindableAppState.isShowingDetailsSheet, onDismiss: {
-            if !appState.isShowingProductsList {
+            if appState.shouldNavigateToProductsList {
+                appState.shouldNavigateToProductsList = false
+                appState.isShowingProductsList = true
+            } else {
                 appState.selectedVendingMachine = nil
             }
         }) {

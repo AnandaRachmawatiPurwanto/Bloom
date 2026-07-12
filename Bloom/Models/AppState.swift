@@ -67,6 +67,7 @@ import Observation
     
     var isShowingDetailsSheet: Bool = false
     var isShowingProductsList: Bool = false
+    var shouldNavigateToProductsList: Bool = false
     
     init() {
         self.selectedVendingMachine = vendingMachines.first

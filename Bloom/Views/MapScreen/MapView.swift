@@ -38,7 +38,10 @@ struct MapView: View {
             .padding(.trailing, 16)
         }
         .sheet(isPresented: $bindableAppState.isShowingDetailsSheet, onDismiss: {
-            if !appState.isShowingProductsList {
+            if appState.shouldNavigateToProductsList {
+                appState.shouldNavigateToProductsList = false
+                appState.isShowingProductsList = true
+            } else {
                 appState.selectedVendingMachine = nil
             }
         }) {
