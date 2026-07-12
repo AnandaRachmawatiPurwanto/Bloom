@@ -46,9 +46,6 @@ struct LocationCard: View {
                 Text(vendingMachine.name)
                     .font(.AppTheme.sectionTitle)
                 
-                Spacer()
-                
-                AvailableCard(style: vendingMachine.isAvailable ? .available : .unavailable)
             }
             
             // Info Jarak & Waktu Tempuh (Dihitung dinamis menggunakan GPS)

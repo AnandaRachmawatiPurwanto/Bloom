@@ -30,10 +30,10 @@ struct ImageSlider: View {
                 //.background(Color.AppTheme.white)
                 .clipped()
                 .cornerRadius(24)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 24)
-                        .stroke(Color.AppTheme.activePink, lineWidth: 4)
-                )
+//                .overlay(
+//                    RoundedRectangle(cornerRadius: 24)
+//                        .stroke(Color.AppTheme.activePink, lineWidth: 4)
+//                )
                 .padding(.horizontal)
                 
                 //.background(Color.AppTheme.white)

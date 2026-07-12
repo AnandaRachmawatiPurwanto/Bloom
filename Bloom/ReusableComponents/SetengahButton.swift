@@ -5,6 +5,11 @@
 //  Created by Ananda Rachmawati Purwanto on 01/07/26.
 //
 
+//
+//  BloomButton.swift
+//  Bloom
+//
+
 import SwiftUI
 
 enum BloomButtonStyle {
@@ -20,6 +25,12 @@ struct BloomButton: View {
     let maxWidth: Bool
     let action: () -> Void
 
+    private let primaryColor = Color(
+        red: 255 / 255,
+        green: 101 / 255,
+        blue: 125 / 255
+    ) // #FF657D
+
     init(
         _ title: String,
         iconName: String? = nil,
@@ -34,6 +45,15 @@ struct BloomButton: View {
         self.action = action
     }
 
+    private var buttonWidth: CGFloat {
+        switch style {
+        case .filled:
+            return 182
+        case .outlined:
+            return 122
+        }
+    }
+
     var body: some View {
 
         Button(action: action) {
@@ -42,6 +62,7 @@ struct BloomButton: View {
 
                 if let iconName {
                     Image(systemName: iconName)
+                        .font(.system(size: 16, weight: .semibold))
                 }
 
                 Text(title)
@@ -50,58 +71,66 @@ struct BloomButton: View {
             .foregroundStyle(
                 style == .filled
                 ? .white
-                : .pink
+                : primaryColor
             )
-            .padding(.horizontal, 16)
-            .padding(.vertical, 9)
-            .frame(maxWidth: 166, maxHeight: 40)
+            .frame(
+                width: maxWidth ? nil : buttonWidth,
+                height: 40
+            )
+            .frame(maxWidth: maxWidth ? .infinity : nil)
             .background(
                 style == .filled
-                ? Color.pink
-                : Color.white
+                ? primaryColor
+                : .white
             )
-            .clipShape(
-                RoundedRectangle(cornerRadius: 40)
-            )
+            .clipShape(Capsule())
             .overlay(
-                RoundedRectangle(cornerRadius: 40)
+                Capsule()
                     .stroke(
-                        style == .outlined ? Color.pink : .clear,
+                        style == .outlined ? primaryColor : .clear,
                         lineWidth: 1.5
                     )
             )
             .shadow(
                 color: style == .filled
-                ? .pink.opacity(0.25)
+                ? primaryColor.opacity(0.25)
                 : .clear,
-                radius: 40,
-                y: 4
+                radius: 12,
+                x: 0,
+                y: 8
             )
-
         }
-
+        .buttonStyle(.plain)
     }
 }
 
 #Preview {
 
-    HStack() {
+    VStack(spacing: 20) {
 
-        BloomButton(
-            "Get Direction",
-            iconName: "location.fill",
-            style: .outlined
-        ) {
+        HStack(spacing: 12) {
 
+            BloomButton(
+                "View Details",
+                style: .outlined
+            ) {
+
+            }
+
+            BloomButton(
+                "Choose Pads"
+            ) {
+
+            }
         }
 
         BloomButton(
-            "Book"
+            "Checkout",
+            maxWidth: true
         ) {
 
         }
 
     }
     .padding()
-
 }
