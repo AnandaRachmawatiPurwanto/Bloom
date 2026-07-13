@@ -86,6 +86,7 @@ import Observation
                 )
                 self.appState.bookings.append(newBooking)
                 self.createdBooking = newBooking
+                self.appState.checkoutCreatedBooking = newBooking
             }
             
             self.navigateToSuccess = true

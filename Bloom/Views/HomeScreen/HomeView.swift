@@ -84,6 +84,9 @@ struct HomeView: View {
         .navigationDestination(isPresented: $bindableAppState.isShowingProductsListHome) {
             ProductsView(appState: appState)
         }
+        .navigationDestination(isPresented: $bindableAppState.isShowingMapFromHome) {
+            MapView(appState: appState)
+        }
     }
 }
 

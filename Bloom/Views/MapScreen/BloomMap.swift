@@ -38,7 +38,7 @@ struct BloomMap: View {
             viewModel.updateRoute(userLocation: appState.locationManager.userLocation, destination: appState.routeDestination)
         }
         .onChange(of: appState.selectedVendingMachine) { _, newMachine in
-            if newMachine != nil {
+            if newMachine != nil && appState.selectedTab == 1 {
                 appState.isShowingDetailsSheet = true
             }
         }

@@ -30,33 +30,28 @@ struct ProductsView: View {
                 LazyVGrid(columns: columns, spacing: 16) {
                     if !viewModel.products.isEmpty {
                         ForEach(viewModel.products) { product in
-                            ProductCard(product: product)
+                            ProductCard(product: product) {
+                                navigateToCheckout = true
+                            }
                         }
                     } else {
                         ForEach(0..<4, id: \.self) { _ in
-                            ProductCard(product: VendingMachineProduct(name: "Regular Pad", imageName: "Pads", price: 15000, stock: 10))
+                            ProductCard(product: VendingMachineProduct(name: "Regular Pad", imageName: "Pads", price: 15000, stock: 10)) {
+                                navigateToCheckout = true
+                            }
                         }
                     }
                 }
-                
-                // MARK: - Checkout Button
-                BloomButton2 {
-                    navigateToCheckout = true
-                } content: {
-                    HStack {
-                        if !viewModel.checkoutItemCountText.isEmpty {
-                            Text(viewModel.checkoutItemCountText)
-                        }
-                        Spacer()
-                        Text(viewModel.checkoutText)
-                    }
-                }
-                .disabled(!viewModel.hasSelection)
             }
             .padding()
         }
         .navigationDestination(isPresented: $navigateToCheckout) {
             CheckoutView(appState: appState)
+        }
+        .onAppear {
+            appState.isShowingDetailsSheet = false
+            appState.selectedProduct = nil
+            appState.selectedQuantity = 1
         }
     }
 }

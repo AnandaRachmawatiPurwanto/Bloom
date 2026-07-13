@@ -15,6 +15,7 @@ struct BookingView: View {
     }
     
     var body: some View {
+        @Bindable var bindableAppState = appState
         VStack(alignment: .leading, spacing: 20) {
             // Header Title
             Text("Bookings")
@@ -69,6 +70,11 @@ struct BookingView: View {
             }
         }
         .background(Color.AppTheme.mainBackground)
+        .navigationDestination(isPresented: $bindableAppState.isShowingBookingDetailFromCheckout) {
+            if let booking = appState.checkoutCreatedBooking {
+                BookingDetailView(booking: booking)
+            }
+        }
     }
 }
 

@@ -69,6 +69,9 @@ import Observation
     var isShowingProductsListHome: Bool = false
     var isShowingProductsListMap: Bool = false
     var shouldNavigateToProductsList: Bool = false
+    var checkoutCreatedBooking: Booking? = nil
+    var isShowingBookingDetailFromCheckout: Bool = false
+    var isShowingMapFromHome: Bool = false
     
     init() {
         self.selectedVendingMachine = vendingMachines.first

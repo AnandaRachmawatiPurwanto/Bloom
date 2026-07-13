@@ -62,8 +62,10 @@ struct ProductDetailsView: View {
                             style: .outlined,
                             maxWidth: true
                         ) {
-                            viewModel.getDirection()
+                            appState.routeDestination = viewModel.selectedVendingMachine?.coordinate
+                            appState.routeDestinationName = viewModel.selectedVendingMachine?.name ?? ""
                             appState.isShowingDetailsSheet = false
+                            appState.isShowingMapFromHome = true
                         }
 
                         BloomButton(

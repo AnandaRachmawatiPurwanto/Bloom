@@ -14,6 +14,7 @@ struct BookingDetailView: View {
     @State private var viewModel: BookingDetailViewModel
     @Environment(AppState.self) var appState
     @Environment(\.dismiss) var dismiss
+    @State private var navigateToMap = false
     
     init(booking: Booking) {
         self.booking = booking
@@ -39,8 +40,7 @@ struct BookingDetailView: View {
                         BloomButton2 {
                             appState.routeDestination = booking.vendingMachine.coordinate
                             appState.routeDestinationName = booking.vendingMachine.name
-                            appState.selectedTab = 1 // Switch to Map tab
-                            dismiss() // Pop back to bookings
+                            navigateToMap = true
                         } content: {
                             HStack {
                                 Text("Get Directions")
@@ -135,6 +135,9 @@ struct BookingDetailView: View {
                 }
                 .padding()
             }
+        }
+        .navigationDestination(isPresented: $navigateToMap) {
+            MapView(appState: appState)
         }
         .onAppear {
             viewModel.listenToFirebase(appState: appState)

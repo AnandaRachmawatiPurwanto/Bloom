@@ -4,6 +4,7 @@ import SwiftUI
 struct ProductCard: View {
     @Environment(AppState.self) var appState
     let product: VendingMachineProduct
+    var onAdd: (() -> Void)? = nil
     
     var isSelected: Bool {
         appState.selectedProduct?.id == product.id
@@ -23,13 +24,9 @@ struct ProductCard: View {
                         style: isSelected ? .filled : .outlined,
                         maxWidth: true
                     ) {
-                        if isSelected {
-                            appState.selectedProduct = nil
-                            appState.selectedQuantity = 1
-                        } else {
-                            appState.selectedProduct = product
-                            appState.selectedQuantity = 1
-                        }
+                        appState.selectedProduct = product
+                        appState.selectedQuantity = 1
+                        onAdd?()
                     }
                     .disabled(product.stock == 0)
                 }

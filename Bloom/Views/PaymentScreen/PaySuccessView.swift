@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct PaySuccessView: View {
-    let booking: Booking
-    @State private var navigateToDetail = false
+    @Environment(AppState.self) var appState
 
     var body: some View {
         VStack {
@@ -24,31 +23,20 @@ struct PaySuccessView: View {
                 .padding()
             Spacer()
             BloomButton2 {
-                navigateToDetail = true
+                appState.isShowingBookingDetailFromCheckout = true
+                appState.selectedTab = 1 // Tab Booking adalah tag 1
+                appState.isShowingProductsListHome = false // Reset Home NavigationStack ke root
             } content: {
                 HStack {
                     Text("See Detail Booking")
-                    
                 }
             }
             .padding()
-        }
-        .navigationDestination(isPresented: $navigateToDetail) {
-            BookingDetailView(booking: booking).navigationBarBackButtonHidden(true)
         }
     }
 }
 
 #Preview {
-    let appState = AppState()
-    let booking = Booking(
-        vendingMachine: appState.vendingMachines[0],
-        date: Date(),
-        totalPrice: 15000,
-        status: .readyForPickup
-    )
-    return NavigationStack {
-        PaySuccessView(booking: booking)
-            .environment(appState)
-    }
+    PaySuccessView()
+        .environment(AppState())
 }
